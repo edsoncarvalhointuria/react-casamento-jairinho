@@ -68,12 +68,17 @@
             height: 100dvh;
             max-height: none;
         }
+
         & video {
             @media all and (max-width: 30em) {
                 object-fit: cover;
                 height: 100%;
             }
         }
+    }
+
+    & .video__video--none {
+        display: none;
     }
 
     .video__presente {

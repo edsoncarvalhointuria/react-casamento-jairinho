@@ -393,14 +393,16 @@ function App() {
 
                 <div className={`video ${showVideo ? "hidden" : ""}`}>
                     <AnimatePresence mode="wait">
-                        {showVideo ? (
-                            <motion.div className="video__video">
-                                <video
-                                    src="/video-convite.mp4"
-                                    autoPlay
-                                ></video>
-                            </motion.div>
-                        ) : (
+                        <motion.div
+                            className={`video__video ${!showVideo ? "video__video--none" : ""}`}
+                        >
+                            <video
+                                src="/video-convite.mp4"
+                                autoPlay
+                                preload="auto"
+                            ></video>
+                        </motion.div>
+                        {!showVideo && (
                             <motion.div
                                 className="video__presente"
                                 ref={videoRef}
