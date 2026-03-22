@@ -317,6 +317,7 @@ function App() {
     const [linkRect, setLinkRect] = useState<DOMRect | null>(null);
     const [showVideo, setShowVideo] = useState(false);
     const [showPresentes, setShowPresentes] = useState(false);
+    const [onCanPlay, setOnCanPlay] = useState(false);
 
     const videoRef = useRef<HTMLDivElement>(null);
     const linkRef = useRef<HTMLDivElement>(null);
@@ -329,14 +330,12 @@ function App() {
 
             const rectLink = linkRef.current.getBoundingClientRect();
             setLinkRect(rectLink);
-
-            setTimeout(() => {
-                setVideoRect(null);
-                setLinkRect(null);
-            }, 3001);
         }
     }, []);
-
+    useEffect(() => {
+        if (!videoRect && !linkRect && onCanPlay)
+            setTimeout(() => setShowVideo(true), 500);
+    }, [videoRect, linkRect, onCanPlay]);
     return (
         <>
             <main>
@@ -372,6 +371,10 @@ function App() {
                                     ],
                                 }}
                                 transition={{ duration: 3 }}
+                                onAnimationComplete={() => {
+                                    setVideoRect(null);
+                                    setLinkRect(null);
+                                }}
                             >
                                 <FontAwesomeIcon icon={faArrowPointer} />
                             </motion.span>
@@ -393,15 +396,17 @@ function App() {
 
                 <div className={`video ${showVideo ? "hidden" : ""}`}>
                     <AnimatePresence mode="wait">
-                        <motion.div
+                        <div
                             className={`video__video ${!showVideo ? "video__video--none" : ""}`}
                         >
                             <video
                                 src="/video-convite.mp4"
                                 autoPlay
                                 preload="auto"
+                                muted
+                                onCanPlayThrough={() => setOnCanPlay(true)}
                             ></video>
-                        </motion.div>
+                        </div>
                         {!showVideo && (
                             <motion.div
                                 className="video__presente"
